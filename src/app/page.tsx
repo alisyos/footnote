@@ -44,7 +44,6 @@ export default function Home() {
   const [inputMethod, setInputMethod] = useState<'upload' | 'text'>('upload');
   const [tempText, setTempText] = useState<string>('');
   const [uploadedFile, setUploadedFile] = useState<string>('');
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const documentRef = useRef<HTMLDivElement>(null);
 
   const onDrop = async (acceptedFiles: File[]) => {
