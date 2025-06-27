@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 문서 각주 생성 시스템
 
-## Getting Started
+OpenAI API를 활용하여 문서에서 선택한 단어에 대한 각주를 자동으로 생성하는 시스템입니다.
 
-First, run the development server:
+## 주요 기능
+
+- **문서 업로드**: DOCX, PDF, TXT 파일 지원
+- **직접 입력**: 텍스트 직접 입력 가능
+- **단어 선택**: 드래그로 단어 선택
+- **자동 정의 생성**: GPT-4를 사용한 맥락 기반 단어 정의
+- **각주 삽입**: 선택 가능한 정의로 각주 생성
+- **좌우 분할 UI**: 원본 문서와 정의를 동시에 확인
+
+## 기술 스택
+
+- **Frontend**: Next.js 14, React, TypeScript
+- **Styling**: Tailwind CSS
+- **AI**: OpenAI GPT-4 API
+- **파일 처리**: mammoth (DOCX), pdf-parse (PDF)
+- **배포**: Vercel
+
+## 설치 및 실행
+
+### 1. 프로젝트 클론
+
+```bash
+git clone <repository-url>
+cd footnote
+```
+
+### 2. 의존성 설치
+
+```bash
+npm install
+```
+
+### 3. 환경변수 설정
+
+`.env.local` 파일을 생성하고 OpenAI API 키를 설정하세요:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### 4. 개발 서버 실행
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 사용 방법
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **문서 업로드**: 파일을 드래그하거나 직접 텍스트를 입력합니다.
+2. **단어 선택**: 좌측 문서에서 궁금한 단어를 드래그로 선택합니다.
+3. **정의 생성**: "정의 생성" 버튼을 클릭합니다.
+4. **정의 선택**: 우측에서 원하는 정의를 체크박스로 선택합니다.
+5. **각주 삽입**: "각주 삽입" 버튼을 클릭하여 문서에 각주를 추가합니다.
 
-## Learn More
+## Vercel 배포
 
-To learn more about Next.js, take a look at the following resources:
+### 1. Vercel CLI 설치
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm i -g vercel
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. 배포
 
-## Deploy on Vercel
+```bash
+vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 3. 환경변수 설정
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Vercel 대시보드에서 환경변수를 설정하세요:
+- `OPENAI_API_KEY`: OpenAI API 키
+
+## API 엔드포인트
+
+### POST /api/generate-definition
+
+문맥을 기반으로 단어의 정의를 생성합니다.
+
+**요청 본문:**
+```json
+{
+  "text": "맥락 텍스트 (7문장)",
+  "word": "정의할 단어"
+}
+```
+
+**응답:**
+```json
+{
+  "word": "단어",
+  "definition": ["의미1", "의미2"],
+  "example": "예시 문장"
+}
+```
+
+### POST /api/parse-document
+
+업로드된 문서에서 텍스트를 추출합니다.
+
+**요청**: FormData with 'file' field
+
+**응답:**
+```json
+{
+  "text": "추출된 텍스트"
+}
+```
+
+## 라이센스
+
+MIT License
